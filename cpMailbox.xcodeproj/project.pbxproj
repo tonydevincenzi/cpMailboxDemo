@@ -14,6 +14,8 @@
 		EA2187431C72F0650024679C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA2187411C72F0650024679C /* LaunchScreen.storyboard */; };
 		EA21874E1C72F0650024679C /* cpMailboxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA21874D1C72F0650024679C /* cpMailboxTests.swift */; };
 		EA2187591C72F0650024679C /* cpMailboxUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2187581C72F0650024679C /* cpMailboxUITests.swift */; };
+		EA2187671C72F29A0024679C /* MailboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2187661C72F29A0024679C /* MailboxViewController.swift */; };
+		EA2187691C72FA7F0024679C /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2187681C72FA7F0024679C /* Common.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		EA2187541C72F0650024679C /* cpMailboxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cpMailboxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA2187581C72F0650024679C /* cpMailboxUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cpMailboxUITests.swift; sourceTree = "<group>"; };
 		EA21875A1C72F0650024679C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EA2187661C72F29A0024679C /* MailboxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailboxViewController.swift; sourceTree = "<group>"; };
+		EA2187681C72FA7F0024679C /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,11 +101,13 @@
 		EA2187371C72F0650024679C /* cpMailbox */ = {
 			isa = PBXGroup;
 			children = (
+				EA2187681C72FA7F0024679C /* Common.swift */,
 				EA2187381C72F0650024679C /* AppDelegate.swift */,
 				EA21873A1C72F0650024679C /* ViewController.swift */,
 				EA21873C1C72F0650024679C /* Main.storyboard */,
 				EA21873F1C72F0650024679C /* Assets.xcassets */,
 				EA2187411C72F0650024679C /* LaunchScreen.storyboard */,
+				EA2187661C72F29A0024679C /* MailboxViewController.swift */,
 				EA2187441C72F0650024679C /* Info.plist */,
 			);
 			path = cpMailbox;
@@ -259,8 +265,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA2187691C72FA7F0024679C /* Common.swift in Sources */,
 				EA21873B1C72F0650024679C /* ViewController.swift in Sources */,
 				EA2187391C72F0650024679C /* AppDelegate.swift in Sources */,
+				EA2187671C72F29A0024679C /* MailboxViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
