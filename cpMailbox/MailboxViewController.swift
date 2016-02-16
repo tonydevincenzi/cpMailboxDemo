@@ -22,16 +22,42 @@ class MailboxViewController: UIViewController {
     @IBOutlet weak var messageFeed: UIImageView!
     @IBOutlet weak var listsView: UIImageView!
     @IBOutlet weak var snoozeView: UIImageView!
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var navigationControl: UISegmentedControl!
+    @IBOutlet weak var composeButton: UIButton!
+    @IBOutlet weak var composeTextField: UITextField!
+    @IBOutlet weak var composeView: UIView!
+    @IBOutlet weak var composeFieldsContainer: UIView!
+    @IBOutlet weak var leftOverflowFeed: UIImageView!
     
     var messageOriginalCenter: CGPoint!
+    var contentOriginalCenter: CGPoint!
+    
+    var messageSwiped: Bool!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mailScrollView.contentSize = CGSize(width:320, height:683)
+        
+        var edgeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: "onEdgePan:")
+        edgeGesture.edges = UIRectEdge.Left
+        contentView.addGestureRecognizer(edgeGesture)
+
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+    
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
+        if motion == .MotionShake {
+            if messageSwiped == true {
+                self.messageFeed.transform = CGAffineTransformMakeTranslation(0.0,0.0)
+                self.messageView.frame.origin.x = 0
+                self.messageSwiped =  false
+            }
+        }
     }
     
     @IBAction func didPanMessage(sender: UIPanGestureRecognizer) {
@@ -96,6 +122,7 @@ class MailboxViewController: UIViewController {
                     delay(0.0, closure: { () -> () in
                         UIView.animateWithDuration(0.3, animations: { () -> Void in
                             self.messageFeed.transform = CGAffineTransformMakeTranslation(0.0,-self.messageView.frame.height)
+                            self.messageSwiped =  true
                         })
                     })
                 })
@@ -128,6 +155,7 @@ class MailboxViewController: UIViewController {
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             self.snoozeView.alpha = 0
             self.messageFeed.transform = CGAffineTransformMakeTranslation(0.0,-self.messageView.frame.height)
+            self.messageSwiped =  true
         })
     }
     
@@ -136,9 +164,94 @@ class MailboxViewController: UIViewController {
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             self.listsView.alpha = 0
             self.messageFeed.transform = CGAffineTransformMakeTranslation(0.0,-self.messageView.frame.height)
+            self.messageSwiped =  true
         })
     }
     
+    @IBAction func onEdgePan(sender: UIScreenEdgePanGestureRecognizer) {
+        let translation = sender.translationInView(view)
+        let velocity = sender.velocityInView(view)
+        
+        if sender.state == UIGestureRecognizerState.Began {
+            contentOriginalCenter = contentView.center
+            leftOverflowFeed.hidden = true
+        } else if sender.state == UIGestureRecognizerState.Changed {
+            contentView.center = CGPoint(x: contentOriginalCenter.x + translation.x, y: contentOriginalCenter.y)
+        } else if sender.state == UIGestureRecognizerState.Ended {
+            if velocity.x > 50 {
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    self.contentView.frame.origin.x = 286
+                })
+            }
+            if velocity.x < -50 {
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    self.contentView.frame.origin.x = 0
+                })
+            }
+        }
+    }
     
+    @IBAction func navigationChanged(sender: UISegmentedControl) {
+        switch navigationControl.selectedSegmentIndex
+        {
+        case 0:
+            //Yellow
+            navigationControl.tintColor = UIColor(red: 248/255, green: 204/255, blue: 40/255, alpha: 1.0)
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                self.mailScrollView.frame.origin.x = 320
+            })
+        case 1:
+            //Blue
+            navigationControl.tintColor = UIColor(red: 68/255, green: 170/255, blue: 210/255, alpha: 1.0)
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                self.mailScrollView.frame.origin.x = 0
+            })
+        case 2:
+            //Green
+            navigationControl.tintColor = UIColor(red: 97/255, green: 211/255, blue: 80/255, alpha: 1.0)
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                self.mailScrollView.frame.origin.x = -320
+            })
+        default:
+            break;
+        }
+    }
+    
+    @IBAction func onComposeButtonClick(sender: AnyObject) {
+        composeView.hidden = false
+        composeView.alpha = 1
+        
+        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options:[] , animations: { () -> Void in
+            self.composeFieldsContainer.frame.origin.y = 20
+
+            }, completion: { (Bool) -> Void in
+        })
+        
+        composeTextField.becomeFirstResponder()
+    }
+    
+    @IBAction func composeCancelClicked(sender: AnyObject) {
+        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options:[] , animations: { () -> Void in
+                self.composeFieldsContainer.frame.origin.y = 280
+            
+            }, completion: { (Bool) -> Void in
+        })
+        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options:[] , animations: { () -> Void in
+                self.composeView.alpha = 0
+            
+            }, completion: { (Bool) -> Void in
+                self.composeView.hidden = true
+        })
+        composeTextField.resignFirstResponder()
+    }
+    
+    func keyboardWillShow(notification: NSNotification!) {
+        
+    }
+    
+    func keyboardWillHide(notification: NSNotification!) {
+        view.endEditing(true)
+    }
+
 }
 
